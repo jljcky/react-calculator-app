@@ -1,13 +1,34 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.calc {
+  margin: auto;
+  border: 3px solid black;
+  width: 500px;
+  height: 700px;
+}
+
+.calc-display {
+  text-align: right;
+  padding-right: 50px;
+  padding-left: 50px;
+  height: 20%;
+}
+
+.calc-buttons {
+  height: 80%;
+}
+
+.calc-row {
+  height: 100px;
+}
+
+.calc-button {
+  text-align: center;
+  width: 100px;
+  height: inherit;
 }
