@@ -1,34 +1,72 @@
-#root {
+:root {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: rgb(16, 16, 16);
+  background: linear-gradient(
+    0deg,
+    rgba(16, 16, 16, 1) 0%,
+    rgba(68, 68, 68, 1) 100%
+  );
 }
 
 .calc {
   margin: auto;
-  border: 3px solid black;
-  width: 500px;
-  height: 700px;
+  background-color: #606060;
+  padding: 10px;
 }
 
 .calc-display {
   text-align: right;
-  padding-right: 50px;
-  padding-left: 50px;
-  height: 20%;
+  margin: 10px;
+  padding: 0 25px 0;
+  border-radius: 10px;
+  background-color: #333333;
+  color: white;
+}
+
+.calc-display > .display-text {
+  font-size: 72px;
 }
 
 .calc-buttons {
-  height: 80%;
-}
-
-.calc-row {
-  height: 100px;
+  margin: auto;
+  align-items: center;
 }
 
 .calc-button {
   text-align: center;
-  width: 100px;
   height: inherit;
+  border-radius: 50px;
+  border: none;
+  box-shadow: none;
+  font-size: 25px;
+  outline: none;
+  transition: all 0.2s;
+}
+.calc-button.modify {
+  background-color: darkgrey;
+}
+
+.calc-button.modify:active {
+  background-color: #cccccc;
+}
+
+.calc-button.operation {
+  background-color: orange;
+  color: white;
+}
+
+.calc-button.operation:active {
+  background-color: #ffcc00;
+}
+
+.calc-button.digit {
+  background-color: grey;
+  color: white;
+}
+
+.calc-button.digit:active {
+  background-color: #aaaaaa;
 }

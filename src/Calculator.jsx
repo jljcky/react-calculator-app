@@ -5,7 +5,6 @@ import CalculatorButtons from "./CalculatorButtons";
 class Calculator extends Component {
   state = {
     display: "0",
-    prevDisplay: "",
     operation: "",
     operationDisplay: "",
     hasDecimal: false,
@@ -18,12 +17,10 @@ class Calculator extends Component {
 
   enterNumber = (d) => {
     let { waitNewNum, display, hasDecimal, prevNum } = this.state;
-    let prevDisplay = "";
 
     if (waitNewNum) {
       waitNewNum = false;
       display = "0";
-      prevDisplay = prevNum.toString();
     }
     if (display === "0") {
       if (d === "0") {
@@ -46,7 +43,6 @@ class Calculator extends Component {
     this.setState({
       waitNewNum: waitNewNum,
       display: display,
-      prevDisplay: prevDisplay,
       hasDecimal: hasDecimal,
       operationDisplay: "",
     });
@@ -68,16 +64,16 @@ class Calculator extends Component {
   };
 
   complete = () => {
-    let { prevNum, operation, hasPrevOp, display, waitNewNum } = this.state;
+    let { prevNum, operation, display, waitNewNum } = this.state;
 
     let currentNum = parseFloat(display);
 
-    if (!hasPrevOp) {
-      this.setState({
-        prevNum: currentNum,
-      });
-      return;
-    }
+    // if (!hasPrevOp) {
+    //   this.setState({
+    //     prevNum: currentNum,
+    //   });
+    //   return;
+    // }
     if (waitNewNum) {
       this.setState({
         operation: "",
@@ -89,18 +85,15 @@ class Calculator extends Component {
     }
 
     prevNum = this.calculate(prevNum, currentNum, operation);
-    currentNum = 0;
     display = prevNum.toString();
 
     this.setState({
       display: display,
-      prevDisplay: "",
       operation: "",
       operationDisplay: "",
       hasDecimal: false,
       prevNum: prevNum,
       currentNum: currentNum,
-      hasPrevOp: false,
       waitNewNum: false,
     });
   };
@@ -110,7 +103,6 @@ class Calculator extends Component {
       hasPrevOp,
       prevNum,
       display,
-      prevDisplay,
       operation,
       operationDisplay,
       waitNewNum,
@@ -135,14 +127,12 @@ class Calculator extends Component {
         operation = o;
         operationDisplay = o;
         display = prevNum.toString();
-        prevDisplay = display;
       }
     }
     this.setState({
       hasPrevOp: hasPrevOp,
       prevNum: prevNum,
       display: display,
-      prevDisplay: prevDisplay,
       operation: operation,
       operationDisplay,
       waitNewNum: waitNewNum,
@@ -153,7 +143,6 @@ class Calculator extends Component {
   clear = () => {
     this.setState({
       display: "0",
-      prevDisplay: "",
       operation: "",
       operationDisplay: "",
       hasDecimal: false,
@@ -169,7 +158,6 @@ class Calculator extends Component {
     return (
       <div className="calc">
         <CalculatorDisplay
-          prevDisplay={this.state.prevDisplay}
           display={this.state.display}
           operationDisplay={this.state.operationDisplay}
         />
