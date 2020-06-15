@@ -1,9 +1,17 @@
 import React from "react";
 
 const CalculatorButton = (props) => {
+  let operation = "";
+  if (
+    props.type === "operation" &&
+    props.operation === props.label &&
+    props.operatorSelected
+  ) {
+    operation = " selected";
+  }
   return (
     <button
-      className={"calc-button " + props.type}
+      className={"calc-button " + props.type + operation}
       onClick={() => {
         props.action();
       }}

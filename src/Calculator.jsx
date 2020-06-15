@@ -6,20 +6,21 @@ class Calculator extends Component {
   state = {
     display: "0",
     operation: "",
-    operationDisplay: "",
-    hasDecimal: false,
+    operatorSelected: false,
     prevNum: 0,
     currentNum: 0,
-    hasPrevOp: false,
-    waitNewNum: false,
+    hasDecimal: false,
+    nextNum: false,
+    startedCalc: false,
     error: false,
+    length: 9,
   };
 
   enterNumber = (d) => {
-    let { waitNewNum, display, hasDecimal, prevNum } = this.state;
+    if (this.state.display.length > 9) return;
 
-    if (waitNewNum) {
-      waitNewNum = false;
+    let { nextNum, display, hasDecimal } = this.state;
+    if (nextNum || !this.state.startedCalc) {
       display = "0";
     }
     if (display === "0") {
@@ -41,10 +42,38 @@ class Calculator extends Component {
       display = display.concat(d);
     }
     this.setState({
-      waitNewNum: waitNewNum,
+      nextNum: false,
       display: display,
       hasDecimal: hasDecimal,
-      operationDisplay: "",
+      operatorSelected: false,
+    });
+  };
+
+  enterOperation = (o) => {
+    let {
+      startedCalc,
+      prevNum,
+      display,
+      operation,
+      nextNum,
+      currentNum,
+    } = this.state;
+    if (!startedCalc) {
+      prevNum = parseFloat(display);
+    } else if (!nextNum) {
+      currentNum = parseFloat(display);
+      prevNum = this.calculate(prevNum, currentNum, operation);
+      display = prevNum.toString().substring(0, this.state.length);
+      currentNum = 0;
+    }
+    this.setState({
+      startedCalc: true,
+      prevNum: prevNum,
+      display: display,
+      operation: o,
+      operatorSelected: true,
+      nextNum: true,
+      currentNum: currentNum,
     });
   };
 
@@ -64,28 +93,25 @@ class Calculator extends Component {
   };
 
   complete = () => {
-    let { prevNum, operation, display, waitNewNum } = this.state;
-
+    let { prevNum, operation, display, nextNum, startedCalc } = this.state;
     let currentNum = parseFloat(display);
 
-    // if (!hasPrevOp) {
-    //   this.setState({
-    //     prevNum: currentNum,
-    //   });
-    //   return;
-    // }
-    if (waitNewNum) {
+    if (!startedCalc) {
       this.setState({
-        operation: "",
-        operationDisplay: "",
-        waitNewNum: false,
         prevNum: currentNum,
       });
       return;
     }
-
+    if (nextNum) {
+      this.setState({
+        operation: "",
+        nextNum: false,
+        prevNum: currentNum,
+      });
+      return;
+    }
     prevNum = this.calculate(prevNum, currentNum, operation);
-    display = prevNum.toString();
+    display = prevNum.toString().substring(0, this.state.length);
 
     this.setState({
       display: display,
@@ -94,49 +120,8 @@ class Calculator extends Component {
       hasDecimal: false,
       prevNum: prevNum,
       currentNum: currentNum,
-      waitNewNum: false,
-    });
-  };
-
-  enterOperation = (o) => {
-    let {
-      hasPrevOp,
-      prevNum,
-      display,
-      operation,
-      operationDisplay,
-      waitNewNum,
-      currentNum,
-    } = this.state;
-
-    if (!hasPrevOp) {
-      hasPrevOp = true;
-      prevNum = parseFloat(display);
-      operation = o;
-      operationDisplay = o;
-      waitNewNum = true;
-    } else {
-      if (waitNewNum) {
-        operation = o;
-        operationDisplay = o;
-      } else {
-        currentNum = parseFloat(display);
-        prevNum = this.calculate(prevNum, currentNum, operation);
-        currentNum = 0;
-        waitNewNum = true;
-        operation = o;
-        operationDisplay = o;
-        display = prevNum.toString();
-      }
-    }
-    this.setState({
-      hasPrevOp: hasPrevOp,
-      prevNum: prevNum,
-      display: display,
-      operation: operation,
-      operationDisplay,
-      waitNewNum: waitNewNum,
-      currentNum: currentNum,
+      nextNum: false,
+      startedCalc: false,
     });
   };
 
@@ -144,28 +129,49 @@ class Calculator extends Component {
     this.setState({
       display: "0",
       operation: "",
-      operationDisplay: "",
       hasDecimal: false,
       prevNum: 0,
       currentNum: 0,
-      hasPrevOp: false,
-      waitNewNum: false,
+      startedCalc: false,
+      nextNum: false,
       error: false,
+    });
+  };
+
+  negate = () => {
+    // negates the number
+    let { display, currentNum } = this.state;
+    currentNum = parseFloat(display);
+    currentNum *= -1;
+    this.setState({
+      display: currentNum.toString().substring(0, this.state.length),
+      currentNum: currentNum,
+    });
+  };
+
+  percent = () => {
+    // sets number to percentage
+    let { display, currentNum } = this.state;
+    currentNum = parseFloat(display);
+    currentNum *= 0.01;
+    this.setState({
+      display: currentNum.toString().substring(0, this.state.length),
+      currentNum: currentNum,
     });
   };
 
   render() {
     return (
       <div className="calc">
-        <CalculatorDisplay
-          display={this.state.display}
-          operationDisplay={this.state.operationDisplay}
-        />
+        <CalculatorDisplay display={this.state.display} />
         <CalculatorButtons
+          {...this.state}
           enterNumber={this.enterNumber}
           enterOperation={this.enterOperation}
           clear={this.clear}
           complete={this.complete}
+          negate={this.negate}
+          percent={this.percent}
         />
       </div>
     );

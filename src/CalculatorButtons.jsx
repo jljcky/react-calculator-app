@@ -6,7 +6,7 @@ const CalculatorButtons = (props) => {
     <div className="calc-buttons">
       <div>
         <CalculatorButton
-          label="AC"
+          label={props.display === "0" ? "AC" : "C"}
           type="modify"
           dim={{ w: 1, h: 1 }}
           action={props.clear}
@@ -15,13 +15,13 @@ const CalculatorButtons = (props) => {
           label="+/-"
           type="modify"
           dim={{ w: 1, h: 1 }}
-          action={props.clear}
+          action={props.negate}
         />
         <CalculatorButton
           type="modify"
           label="%"
           dim={{ w: 1, h: 1 }}
-          action={props.clear}
+          action={props.percent}
         />
         <CalculatorButton
           type="operation"
@@ -30,6 +30,8 @@ const CalculatorButtons = (props) => {
           action={() => {
             props.enterOperation("/");
           }}
+          operation={props.operation}
+          operatorSelected={props.operatorSelected}
         />
       </div>
       <div>
@@ -64,6 +66,8 @@ const CalculatorButtons = (props) => {
           action={() => {
             props.enterOperation("*");
           }}
+          operation={props.operation}
+          operatorSelected={props.operatorSelected}
         />
       </div>
       <div>
@@ -98,6 +102,8 @@ const CalculatorButtons = (props) => {
           action={() => {
             props.enterOperation("-");
           }}
+          operation={props.operation}
+          operatorSelected={props.operatorSelected}
         />
       </div>
       <div>
@@ -132,6 +138,8 @@ const CalculatorButtons = (props) => {
           action={() => {
             props.enterOperation("+");
           }}
+          operation={props.operation}
+          operatorSelected={props.operatorSelected}
         />
       </div>
       <div>

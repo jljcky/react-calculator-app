@@ -13,8 +13,10 @@
 
 .calc {
   margin: auto;
-  background-color: #606060;
-  padding: 10px;
+  /* background-color: #606060; */
+  background-color: #333333;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .calc-display {
@@ -60,6 +62,11 @@
 
 .calc-button.operation:active {
   background-color: #ffcc00;
+}
+
+.calc-button.operation.selected {
+  background-color: white;
+  color: orange;
 }
 
 .calc-button.digit {
