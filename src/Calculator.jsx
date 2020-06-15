@@ -11,7 +11,8 @@ class Calculator extends Component {
     currentNum: 0,
     hasDecimal: false,
     nextNum: false,
-    startedCalc: false,
+    startedNum: false,
+    startedOp: false,
     error: false,
     length: 9,
   };
@@ -19,8 +20,9 @@ class Calculator extends Component {
   enterNumber = (d) => {
     if (this.state.display.length > 9) return;
 
-    let { nextNum, display, hasDecimal } = this.state;
-    if (nextNum || !this.state.startedCalc) {
+    let { nextNum, display, hasDecimal, prevNum } = this.state;
+    if (nextNum || !this.state.startedNum) {
+      prevNum = 0;
       display = "0";
     }
     if (display === "0") {
@@ -46,20 +48,23 @@ class Calculator extends Component {
       display: display,
       hasDecimal: hasDecimal,
       operatorSelected: false,
+      startedNum: true,
     });
   };
 
   enterOperation = (o) => {
     let {
-      startedCalc,
+      startedOp,
       prevNum,
       display,
       operation,
       nextNum,
       currentNum,
     } = this.state;
-    if (!startedCalc) {
-      prevNum = parseFloat(display);
+
+    // fix this plz
+    if (!startedOp) {
+      prevNum = display.toString().substring(0, this.state.length);
     } else if (!nextNum) {
       currentNum = parseFloat(display);
       prevNum = this.calculate(prevNum, currentNum, operation);
@@ -67,7 +72,7 @@ class Calculator extends Component {
       currentNum = 0;
     }
     this.setState({
-      startedCalc: true,
+      startedOp: true,
       prevNum: prevNum,
       display: display,
       operation: o,
@@ -93,10 +98,10 @@ class Calculator extends Component {
   };
 
   complete = () => {
-    let { prevNum, operation, display, nextNum, startedCalc } = this.state;
+    let { prevNum, operation, display, nextNum } = this.state;
     let currentNum = parseFloat(display);
 
-    if (!startedCalc) {
+    if (!this.state.startedNum || !this.state.startedOp) {
       this.setState({
         prevNum: currentNum,
       });
@@ -121,7 +126,9 @@ class Calculator extends Component {
       prevNum: prevNum,
       currentNum: currentNum,
       nextNum: false,
-      startedCalc: false,
+      startedNum: false,
+      startedOp: false,
+      operatorSelected: false,
     });
   };
 
@@ -132,7 +139,8 @@ class Calculator extends Component {
       hasDecimal: false,
       prevNum: 0,
       currentNum: 0,
-      startedCalc: false,
+      startedNum: false,
+      startedOp: false,
       nextNum: false,
       error: false,
     });
@@ -140,23 +148,23 @@ class Calculator extends Component {
 
   negate = () => {
     // negates the number
-    let { display, currentNum } = this.state;
-    currentNum = parseFloat(display);
-    currentNum *= -1;
+    let { display, prevNum } = this.state;
+    prevNum = parseFloat(display);
+    prevNum *= -1;
     this.setState({
-      display: currentNum.toString().substring(0, this.state.length),
-      currentNum: currentNum,
+      display: prevNum.toString().substring(0, this.state.length),
+      prevNum: prevNum,
     });
   };
 
   percent = () => {
     // sets number to percentage
-    let { display, currentNum } = this.state;
-    currentNum = parseFloat(display);
-    currentNum *= 0.01;
+    let { display, prevNum } = this.state;
+    prevNum = parseFloat(display);
+    prevNum *= 0.01;
     this.setState({
-      display: currentNum.toString().substring(0, this.state.length),
-      currentNum: currentNum,
+      display: prevNum.toString().substring(0, this.state.length),
+      prevNum: prevNum,
     });
   };
 
