@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&family=VT323&display=swap");
 :root {
   display: flex;
   justify-content: center;
@@ -26,6 +27,7 @@
   border-radius: 10px;
   background-color: #333333;
   color: white;
+  font-family: VT323, sans-serif;
 }
 
 .calc-display > .display-text {
@@ -43,6 +45,7 @@
   border-radius: 50px;
   border: none;
   box-shadow: none;
+  font-family: "Krona One", sans-serif;
   font-size: 25px;
   outline: none;
   transition: all 0.2s;

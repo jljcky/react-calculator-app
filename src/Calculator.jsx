@@ -18,11 +18,9 @@ class Calculator extends Component {
   };
 
   enterNumber = (d) => {
-    if (this.state.display.length > 9) return;
-
-    let { nextNum, display, hasDecimal, prevNum } = this.state;
+    let { nextNum, display, hasDecimal } = this.state;
+    if (this.state.display.length > 9 && !nextNum) return;
     if (nextNum || !this.state.startedNum) {
-      prevNum = 0;
       display = "0";
     }
     if (display === "0") {
@@ -43,6 +41,7 @@ class Calculator extends Component {
       }
       display = display.concat(d);
     }
+
     this.setState({
       nextNum: false,
       display: display,
@@ -62,7 +61,6 @@ class Calculator extends Component {
       currentNum,
     } = this.state;
 
-    // fix this plz
     if (!startedOp) {
       prevNum = display.toString().substring(0, this.state.length);
     } else if (!nextNum) {
@@ -83,6 +81,8 @@ class Calculator extends Component {
   };
 
   calculate = (firstNum, secondNum, operation) => {
+    firstNum = parseFloat(firstNum);
+    secondNum = parseFloat(secondNum);
     switch (operation) {
       case "+":
         return firstNum + secondNum;
