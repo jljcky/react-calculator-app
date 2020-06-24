@@ -80,3 +80,9 @@
 .calc-button.digit:active {
   background-color: #aaaaaa;
 }
+
+#credit-line {
+  color: white;
+  display: flex;
+  justify-content: center;
+}
